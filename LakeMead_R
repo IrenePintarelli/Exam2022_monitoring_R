@@ -107,7 +107,7 @@ years <- c("2000","2022")
 lake_surface <- c(11.92473,6.728586)
 lake_variation <- data.frame(years,lake_surface)
 
-# I create a graphic of the variation
+# I create a graphic of the variation of the lake surface
 ggplot(lake_variation,aes(x=years,y=lake_surface,color=years))+geom_bar(stat="identity",fill="white")
 
 
