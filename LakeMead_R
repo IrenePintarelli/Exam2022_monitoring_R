@@ -17,6 +17,7 @@ lm00 <- ggRGB(lm2000,1,2,3,stretch="lin")
 lm22 <- ggRGB(lm2022,1,2,3,stretch="lin")
 lm00 / lm22
 
+dev.off()
 
 # check the info contained and the number of pixel and layers in the first image lm2000
 lm2000
@@ -26,6 +27,8 @@ lm2000
 ## 3 = GREEN
 # plot the 3 bands
 plot(lm2000)
+
+dev.off()
 
 # create a plot of the image with different class to distinguish the soil and the land covered by the lake
 lm2000_c2 <- unsuperClass(lm2000,nClasses=2)
@@ -57,6 +60,8 @@ perc_soil_2000 <- soil / tot2000 * 100
 perc_soil_2000
 # 88.07527
 
+dev.off()
+
 # in order to compare the images I need to follow the same step for lm2022
 
 # create a plot of the image with different classes to distinguish the soil and the land covered by the lake
@@ -67,6 +72,9 @@ plot(lm2022_c3$map)
 lm2022_c4 <- unsuperClass(lm2022,nClasses=4)
 # change the colours of the map creating a coloRampPalette
 cl<- colorRampPalette(c("red","orange","green","blue"))(100)
+
+dev.off()
+
 # then plot the original image together with the unsupervised one
 par(mfrow=c(2,1))
 plotRGB(lm2022)
