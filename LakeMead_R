@@ -1,0 +1,115 @@
+# set the working directory where I downloaded the images from https://earthobservatory.nasa.gov/images/150111/lake-mead-keeps-dropping
+setwd("C:/R/")
+
+# load the libraries I will need to elaborate the data
+library(raster)
+library(RStoolbox)
+library(ggplot2)
+library(gridExtra)
+library(patchwork)
+
+# load the pictures lakemead2000 and lakemead2022
+lm2000 <- brick("lakemead2000.jpg")
+lm2022 <- brick("lakemead2022.jpg")
+
+# to see the pictures together I need to plot them
+lm00 <- ggRGB(lm2000,1,2,3,stretch="lin")
+lm22 <- ggRGB(lm2022,1,2,3,stretch="lin")
+lm00 / lm22
+
+
+# check the info contained and the number of pixel and layers in the first image lm2000
+lm2000
+# being an elaborated image from Landsat we have 3 layers
+## 1 = NIR
+## 2 = RED
+## 3 = GREEN
+# plot the 3 bands
+plot(lm2000)
+
+# create a plot of the image with different class to distinguish the soil and the land covered by the lake
+lm2000_c2 <- unsuperClass(lm2000,nClasses=2)
+plot(lm2000_c2$map) # as it'a model otherwise it cannot plot it if I don't specify map
+# part of soil is classified as the lake so try with 3 classes
+lm2000_c3 <- unsuperClass(lm2000,nClasses=3)
+plot(lm2000_c3$map)
+# if I plot this image with the original one, I see there's more correspondance with 1 class only for the lake and two other classes for the soil
+par(mfrow=c(2,1))
+plotRGB(lm2000,1,2,3,stretch="lin")
+plot(lm2000_c3$map)
+# check the number of pixel in the different classes
+freq(lm2000_c3$map)
+
+# I write down the number of pixels related to the soil summing them together, if
+# 1st and 2nd classes: white and yellow <- soil
+# 3th class: green <- water
+soil <- 13091536 + 9153582
+lake <- 3011822
+
+# the total number of pixel (soil + lake)
+tot2000 <- 25256940
+
+# calculate the percentages of water surface and soil
+perc_lake_2000<- lake / tot2000 * 100
+perc_lake_2000
+# 11.92473
+perc_soil_2000 <- soil / tot2000 * 100
+perc_soil_2000
+# 88.07527
+
+# in order to compare the images I need to follow the same step for lm2022
+
+# create a plot of the image with different classes to distinguish the soil and the land covered by the lake
+lm2022_c3 <- unsuperClass(lm2022,nClasses=3)
+plot(lm2022_c3$map)
+# plotting the original image and the one unsupervised with 3 classes as I did with the image related to 2000 I see there are different areas considered as lake 
+# in stead of soil, so I try to increase the number of classes 
+lm2022_c4 <- unsuperClass(lm2022,nClasses=4)
+# change the colours of the map creating a coloRampPalette
+cl<- colorRampPalette(c("red","orange","green","blue"))(100)
+# then plot the original image together with the unsupervised one
+par(mfrow=c(2,1))
+plotRGB(lm2022)
+plot(lm2022_c4,col=cl)
+
+# now I check the number of pixel for each class
+freq(lm2022_c4$map)
+# 1 : red --> soil
+# 2 : orange --> soil
+# 3 : green --> lake
+# 4 : blue --> soil
+# 1+2+4 --> soil
+
+soil22 <- 6160042 + 6874819 + 10522644
+lake22 <- 1699435
+tot22 <- soil22 + lake22
+tot22
+
+# calculate the percentages
+perc_lake_22 <- lake22 / tot22 * 100
+perc_lake_22 
+# 6.728586
+> perc_soil_22 <- soil22 / tot22 * 100
+> perc_soil_22 
+# 93.27141
+
+# biuld a data frame with the differences between 2000 and 2022
+# create the columns
+class <- c("soil %","lake surface %")
+year2000 <- c(88.07527, 11.92473)
+year2022 <- c(93.27141,6.728586)
+
+lake_mead <- data.frame(class,year2000,year2022)
+lake_mead
+
+# build a data frame only with the percentages of the lake dimension
+years <- c("2000","2022")
+lake_surface <- c(11.92473,6.728586)
+lake_variation <- data.frame(years,lake_surface)
+
+# I create a graphic of the variation
+ggplot(lake_variation,aes(x=years,y=lake_surface,color=years))+geom_bar(stat="identity",fill="white")
+
+
+
+
