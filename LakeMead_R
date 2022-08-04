@@ -140,18 +140,44 @@ diff_ls
 
 
 # now analyse the area around the lake not just the change in dimensions of the lake surface
-# elaborate a PCA analysis of both images and compare if there are differences in the etereogenity of the entire area
+# elaborate a PCA analysis of both images and compare if there are differences in the hetereogenity of the entire area
 lm2000_pca <- rasterPCA(lm2000)
 # to understand which component contain more info
 summary(lm2000_pca$model)
-# as the proportion of variance is higher in the firs band I visualize the map only of the firs component
+# as the proportion of variance is higher in the first band I visualize the map only of the first component
 lm2000_pca_c1 <- lm2000_pca$map$PC1
 lm2000_pca_c1
+# I calculate the standard deviation using a matrix of 3 x 3
+lm00_sd <- focal(lm2000_pca_c1,matrix(1/9,3,3),fun=sd)
 
-# let's see the map of the component 1
-ggplot()+geom_raster(lm2000_pca_c1,mapping=aes(x=x,y=y,fill=PC1))
+# let's see the map of the standard deviation of the component 1
+c1_2000 <- ggplot()+geom_raster(lm00_sd,mapping=aes(x=x,y=y,fill=layer))+scale_fill_viridis(option="inferno")
 
+# if I wanna see the comparison with the original map
+lm00 + c1_2000
 
+# even if the hetereogenity is quite low in 2000, I can see how is the result for the 2022 image doing the same passages
+lm2022_pca <- rsterPCA(lm2022)
+summary(lm2022_pca$model)
+# even in this case the proportion of variance is higher for the first component
+lm2022_pca_c1 <- lm2022_pca$map$PC1
+lm2022_pca_c1
+# calculation of the standard deviation using the function focal
+lm22_sd <- focal(lm2022_pca_c1,matrix(1/9,3,3),fun=sd)
+
+# let's see the map of the standard deviation of the component 1
+c1_2022 <- ggplot()+geom_raster(lm22_sd,mapping=aes(x=x,y=y,fill=layer))+scale_fill_viridis(option="inferno")
+
+# to see the comparison with the original map
+lm22 + c1_2022
+
+# to see the comparison between the 2 different years
+c1_2000 + c1_2022
+
+# as we can see from the both analysis the hetereogenity is quite low everywhere except for the area near the lake, but there's not big differences between the 2 years
+jpeg("Standard_Deviation.jpg")
+c1_2000 + c1_2022
+dev.off()
 
 
 
