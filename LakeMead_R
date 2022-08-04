@@ -133,8 +133,29 @@ ggplot(lake_variation,aes(x=years,y=lake_surface,color=years))+geom_bar(stat="id
 # try to calculate the different percentages only between the lake surfaces in 2000 and 2022
 # I consider the lake surface in 2000 as the 100%
 # calculate the difference between the two percentages and then how smaller the lake got (100 : x = 11.92473 : diff_perc)
-diff_perc <- perc_lake_2000 - perc_lake_2022
+diff_perc <- perc_lake_2000 - perc_lake_22
 diff_ls <- 100 * diff_perc / 11.92473
 diff_ls
 # 43.57452
+
+
+# now analyse the area around the lake not just the change in dimensions of the lake surface
+# elaborate a PCA analysis of both images and compare if there are differences in the etereogenity of the entire area
+lm2000_pca <- rasterPCA(lm2000)
+# to understand which component contain more info
+summary(lm2000_pca$model)
+# as the proportion of variance is higher in the firs band I visualize the map only of the firs component
+lm2000_pca_c1 <- lm2000_pca$map$PC1
+lm2000_pca_c1
+
+# let's see the map of the component 1
+ggplot()+geom_raster(lm2000_pca_c1,mapping=aes(x=x,y=y,fill=PC1))
+
+
+
+
+
+
+
+
 
