@@ -130,4 +130,10 @@ lake_variation <- data.frame(years,lake_surface)
 ggplot(lake_variation,aes(x=years,y=lake_surface,color=years))+geom_bar(stat="identity",fill="white")
 
 
+# try to calculate the different percentages only between the lake surfaces in 2000 and 2022
+# I consider the lake surface in 2000 as the 100%
+# calculate the difference between the two percentages and then how smaller the lake got (100 : x = 11.92473 : diff_perc)
+diff_perc <- perc_lake_2000 - perc_lake_2022
+diff_ls <- 100 * diff_perc / 11.92473
+
 
