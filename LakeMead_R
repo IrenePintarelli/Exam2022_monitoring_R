@@ -138,6 +138,8 @@ diff_ls <- 100 * diff_perc / 11.92473
 diff_ls
 # 43.57452
 
+################################################## end ################################################
+
 
 # now analyse the area around the lake not just the change in dimensions of the lake surface
 # elaborate a PCA analysis of both images and compare if there are differences in the hetereogenity of the entire area
