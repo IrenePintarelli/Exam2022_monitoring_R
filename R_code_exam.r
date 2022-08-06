@@ -12,7 +12,7 @@ library(patchwork)
 lm2000 <- brick("lakemead2000.jpg")
 lm2022 <- brick("lakemead2022.jpg")
 
-# to see the pictures together I need to plot them
+# to see the pictures together I need to plot them with ggRGB and use the package patchwork (+ = on enext to the othe, / = one under the other)
 lm00 <- ggRGB(lm2000,1,2,3,stretch="lin")
 lm22 <- ggRGB(lm2022,1,2,3,stretch="lin")
 lm00 / lm22
@@ -30,7 +30,8 @@ plot(lm2000)
 
 dev.off()
 
-# create a plot of the image with different class to distinguish the soil and the land covered by the lake
+# create a plot of the image with different classes to distinguish the soil and the lake surface
+# I want only one class which highlights the lake so I start with 2 classes and the I see
 lm2000_c2 <- unsuperClass(lm2000,nClasses=2)
 plot(lm2000_c2$map) # as it'a model otherwise it cannot plot it if I don't specify map
 # part of soil is classified as the lake so try with 3 classes
@@ -60,9 +61,9 @@ perc_soil_2000 <- soil / tot2000 * 100
 perc_soil_2000
 # 88.07527
 
-# in order to compare the images I need to follow the same step for lm2022
+# in order to compare the images I need to follow the same steps for lm2022
 
-# check the info contained and the number of pixel and layers in the first image lm2022
+# check the info contained and the number of pixels and layers in the first image lm2022
 lm2022
 # being an elaborated image from Landsat we have 3 layers
 ## 1 = NIR
@@ -76,8 +77,8 @@ dev.off ()
 # create a plot of the image with different classes to distinguish the soil and the land covered by the lake
 lm2022_c3 <- unsuperClass(lm2022,nClasses=3)
 plot(lm2022_c3$map)
-# plotting the original image and the one unsupervised with 3 classes, like I did with the image related to 2000, I see there are different areas considered as lake 
-# in stead of soil, so I try to increase the number of classes 
+# plotting the original image and the one unsupervised with 3 classes, like I did with the image related to 2000, I see there are different soil areas considered as lake 
+# I try to increase the number of classes 
 lm2022_c4 <- unsuperClass(lm2022,nClasses=4)
 # change the colours of the map creating a coloRampPalette
 cl <- colorRampPalette(c("red","orange","green","blue"))(100)
@@ -90,7 +91,7 @@ par(mfrow=c(2,1))
 plotRGB(lm2022)
 plot(lm2022_c4$map,col=cl)
 
-# now I check the number of pixel for each class
+# now I check the number of pixels for each class
 freq(lm2022_c4$map)
 # 1 : red --> soil
 # 2 : orange --> soil
@@ -98,8 +99,10 @@ freq(lm2022_c4$map)
 # 4 : blue --> soil
 # 1+2+4 --> soil
 
+# I sum the pixelrs related to the soil
 soil22 <- 6160042 + 6874819 + 10522644
 lake22 <- 1699435
+# I need the total amount of pixels for the calculation of the percentages
 tot22 <- soil22 + lake22
 tot22
 
@@ -116,7 +119,7 @@ perc_soil_22
 class <- c("soil %","lake surface %")
 year2000 <- c(88.07527, 11.92473)
 year2022 <- c(93.27141,6.728586)
-
+# create the dataframe
 lake_mead <- data.frame(class,year2000,year2022)
 lake_mead
 View(lake_mead)
@@ -149,7 +152,7 @@ summary(lm2000_pca$model)
 # as the proportion of variance is higher in the first band I visualize the map only of the first component
 lm2000_pca_c1 <- lm2000_pca$map$PC1
 lm2000_pca_c1
-# I calculate the standard deviation using a matrix of 3 x 3
+# I calculate the standard deviation using a matrix of 3 x 3 and the function focal
 lm00_sd <- focal(lm2000_pca_c1,matrix(1/9,3,3),fun=sd)
 
 # let's see the map of the standard deviation of the component 1
