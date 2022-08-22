@@ -163,7 +163,7 @@ c1_2000 <- ggplot()+geom_raster(lm00_sd,mapping=aes(x=x,y=y,fill=layer))+scale_f
 lm00 + c1_2000
 
 # even if the hetereogenity is quite low in 2000, I can see how is the result for the 2022 image doing the same passages
-lm2022_pca <- rsterPCA(lm2022)
+lm2022_pca <- rasterPCA(lm2022)
 summary(lm2022_pca$model)
 # even in this case the proportion of variance is higher for the first component
 lm2022_pca_c1 <- lm2022_pca$map$PC1
