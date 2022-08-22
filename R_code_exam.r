@@ -12,28 +12,29 @@ library(patchwork)
 lm2000 <- brick("lakemead2000.jpg")
 lm2022 <- brick("lakemead2022.jpg")
 
-# to see the pictures together I need to plot them with ggRGB and use the package patchwork (+ = on enext to the othe, / = one under the other)
+# to see the pictures together I need to plot them with ggRGB and use the package patchwork (+ = one next to the othe, / = one under the other)
 lm00 <- ggRGB(lm2000,1,2,3,stretch="lin")
 lm22 <- ggRGB(lm2022,1,2,3,stretch="lin")
 lm00 / lm22
+lm00 + lm22
 
 dev.off()
 
-# check the info contained and the number of pixel and layers in the first image lm2000
+# check the info contained and the number of pixels and layers in the first image lm2000
 lm2000
 # being an elaborated image from Landsat we have 3 layers
 ## 1 = NIR
 ## 2 = RED
 ## 3 = GREEN
-# plot the 3 bands
+# plot the 3 bands (separated)
 plot(lm2000)
 
 dev.off()
 
 # create a plot of the image with different classes to distinguish the soil and the lake surface
-# I want only one class which highlights the lake so I start with 2 classes and the I see
+# I want only one class which highlights the lake so I start with 2 classes and then I see
 lm2000_c2 <- unsuperClass(lm2000,nClasses=2)
-plot(lm2000_c2$map) # as it'a model otherwise it cannot plot it if I don't specify map
+plot(lm2000_c2$map) # $map is necessary as it's a model otherwise, I cannot plot it if I don't specify map
 # part of soil is classified as the lake so try with 3 classes
 lm2000_c3 <- unsuperClass(lm2000,nClasses=3)
 plot(lm2000_c3$map)
@@ -41,7 +42,7 @@ plot(lm2000_c3$map)
 par(mfrow=c(2,1))
 plotRGB(lm2000,1,2,3,stretch="lin")
 plot(lm2000_c3$map)
-# check the number of pixel in the different classes
+# check the number of pixels in the different classes
 freq(lm2000_c3$map)
 
 # I write down the number of pixels related to the soil summing them together, if (not always like that)
@@ -88,7 +89,7 @@ dev.off()
 
 # then plot the original image together with the unsupervised one
 par(mfrow=c(2,1))
-plotRGB(lm2022)
+plotRGB(lm2022,1,2,3,stretch="Lin")
 plot(lm2022_c4$map,col=cl)
 
 # now I check the number of pixels for each class
