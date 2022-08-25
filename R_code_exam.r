@@ -157,6 +157,8 @@ lm2000_pca_c1
 lm00_sd <- focal(lm2000_pca_c1,matrix(1/9,3,3),fun=sd)
 
 # let's see the map of the standard deviation of the component 1
+# load the library viridis to use its set of colours
+library(viridis)
 c1_2000 <- ggplot()+geom_raster(lm00_sd,mapping=aes(x=x,y=y,fill=layer))+scale_fill_viridis(option="inferno")+ggtitle("Standard Deviation for C1 in 2000")
 
 # if I wanna see the comparison with the original map
@@ -172,7 +174,6 @@ lm2022_pca_c1
 lm22_sd <- focal(lm2022_pca_c1,matrix(1/9,3,3),fun=sd)
 
 # let's see the map of the standard deviation of the component 1
-library(viridis)
 c1_2022 <- ggplot()+geom_raster(lm22_sd,mapping=aes(x=x,y=y,fill=layer))+scale_fill_viridis(option="inferno")+ggtitle("Standard Deviation for C1 in 2022")
 
 
