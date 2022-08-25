@@ -94,9 +94,9 @@ plot(lm2022_c4$map,col=cl)
 
 # now I check the number of pixels for each class
 freq(lm2022_c4$map)
-# 1 : red --> soil
+# 1 : red --> lake
 # 2 : orange --> soil
-# 3 : green --> lake
+# 3 : green --> soil
 # 4 : blue --> soil
 # 1+2+4 --> soil
 
