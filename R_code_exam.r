@@ -12,7 +12,7 @@ library(patchwork)
 lm2000 <- brick("lakemead2000.jpg")
 lm2022 <- brick("lakemead2022.jpg")
 
-# to see the pictures together I need to plot them with ggRGB and use the package patchwork (+ = one next to the othe, / = one under the other)
+# to see the pictures together I need to plot them with ggRGB and use the package patchwork (+ = one next to the other, / = one under the other)
 lm00 <- ggRGB(lm2000,1,2,3,stretch="lin")
 lm22 <- ggRGB(lm2022,1,2,3,stretch="lin")
 lm00 / lm22
@@ -46,8 +46,8 @@ plot(lm2000_c3$map)
 freq(lm2000_c3$map)
 
 # I write down the number of pixels related to the soil summing them together, if (not always like that)
-# 1st and 2nd classes: white and yellow <- soil
-# 3th class: green <- water
+# 3th and 2nd classes: green and yellow <- soil
+# 1st class: white <- water
 soil <- 13091536 + 9153582
 lake <- 3011822
 
